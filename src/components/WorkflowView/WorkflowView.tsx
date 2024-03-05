@@ -15,6 +15,7 @@ import { useConfig } from "payload/components/utilities";
 import { SelectionProvider } from "payload/dist/admin/components/views/collections/List/SelectionProvider";
 import { ListControls } from 'payload/dist/admin/components/elements/ListControls'
 import DefaultList from "payload/dist/admin/components/views/collections/List/Default";
+import {WorkflowViewConfigContext} from "../WorkflowViewConfigContext/WorkflowViewConfigContext";
 
 const baseClass = 'scrumboard';
 
@@ -83,32 +84,33 @@ const WorkflowView = (config: PluginCollectionConfig) => (props: ListProps) => {
       totalDocs={ data.totalDocs }
     >
       <Gutter className={ `${ baseClass }__wrap` }>
+        <WorkflowViewConfigContext.Provider value={config}>
+          <WorkflowViewHeader
+            hasCreatePermission={ hasCreatePermission }
+            newDocumentURL={ newDocumentURL }
+            pluralLabel={ pluralLabel }
+            isShowingWorkflow={ showingWorkflow }
+            onWorkflowViewSwitch={ () => setShowingWorkflow(false) }
+          />
 
-        <WorkflowViewHeader
-          hasCreatePermission={ hasCreatePermission }
-          newDocumentURL={ newDocumentURL }
-          pluralLabel={ pluralLabel }
-          isShowingWorkflow={ showingWorkflow }
-          onWorkflowViewSwitch={ () => setShowingWorkflow(false) }
-        />
+          <ListControls
+            collection={collection}
+            handleSearchChange={handleSearchChange}
+            handleSortChange={handleSortChange}
+            handleWhereChange={handleWhereChange}
+            modifySearchQuery={modifySearchParams}
+            resetParams={resetParams}
+            titleField={titleField}
+          />
 
-        <ListControls
-          collection={collection}
-          handleSearchChange={handleSearchChange}
-          handleSortChange={handleSortChange}
-          handleWhereChange={handleWhereChange}
-          modifySearchQuery={modifySearchParams}
-          resetParams={resetParams}
-          titleField={titleField}
-        />
-
-        <Board
-          collection={ collection }
-          documents={ data.docs }
-          hideNoStatusColumn={ config.hideNoStatusColumn }
-          statusDefinition={ statusDefinition }
-          onDocumentWorkflowStatusChange={ handleDocumentWorkflowStatusChange }
-        />
+          <Board
+            collection={ collection }
+            documents={ data.docs }
+            hideNoStatusColumn={ config.hideNoStatusColumn }
+            statusDefinition={ statusDefinition }
+            onDocumentWorkflowStatusChange={ handleDocumentWorkflowStatusChange }
+          />
+        </WorkflowViewConfigContext.Provider>
       </Gutter>
     </SelectionProvider>
   </div>

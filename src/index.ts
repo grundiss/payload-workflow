@@ -2,12 +2,16 @@ import { Config, Plugin } from "payload/config";
 import { CollectionConfig, OptionObject } from "payload/types";
 import generateOrderRank from "./hooks/generateOrderRank";
 import WorkflowView from "./components/WorkflowView/WorkflowView";
+import { BoardCardDefaultContentProps } from "./components/BoardCardDefaultContent/BoardCardDefaultContent";
 
 export interface PluginCollectionConfig {
   statuses: OptionObject[],
   defaultStatus?: string;
   hideNoStatusColumn?: boolean;
+  cardContentComponent?: React.ElementType<BoardCardDefaultContentProps>
 }
+
+export type { BoardCardDefaultContentProps } from "./components/BoardCardDefaultContent/BoardCardDefaultContent";
 
 const extendCollectionConfig = (
   pluginConfig: Record<string, PluginCollectionConfig>,

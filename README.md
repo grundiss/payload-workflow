@@ -42,6 +42,28 @@ const config = buildConfig({
 });
 ```
 
+## Stylizing the cards
+
+```typescript
+import { payloadWorkflow } from 'payload-workflow';
+import type { BoardCardDefaultContentProps } from 'payload-workflow';
+import { Link } from "react-router-dom";
+
+const config = buildConfig({
+  collections: [ ... ],
+  plugins: [
+    payloadWorkflow({
+      'my-collection-slug': {
+        statuses: [ ... ],
+        cardContentComponent: ({admin, data, link}: BoardCardDefaultContentProps) => ( 
+          <Link to={link}>{ data.title }</Link>
+        )
+      }
+    })
+  ],
+});
+```
+
 ## Differences with the draft/publish system of Payload.
 
 The workflow plugin introduces a new field called `workflowStatus`. This field does not interact with the draft/publish
@@ -56,7 +78,7 @@ For example: Automatically publish the document when the `workflowStatus` has be
 Upcoming Features / Ideas. Have a suggestion for the plugin? Feel free to open an issue or contribute!
 
 - [X] Payload 2.0 support
-- [ ] Customize card properties (currently displays `title` and `createdAt`)
+- [X] Customize card properties (currently displays `title` and `createdAt`)
 - [ ] Edit relationships directly from the card (e.g., assigning users to a document)
 - [X] Toggleable column for posts without a workflow status (Currently, documents lacking `workflowStatus` aren't
   visible on the board)

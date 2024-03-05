@@ -8,6 +8,7 @@ import Media from './collections/Media';
 import { mongooseAdapter } from "@payloadcms/db-mongodb";
 import { slateEditor } from "@payloadcms/richtext-slate";
 import { webpackBundler } from "@payloadcms/bundler-webpack";
+import CategoryCard from "./components/CategoryCard/CategoryCard";
 
 import { payloadWorkflow } from "../../src/index";
 
@@ -59,6 +60,16 @@ export default buildConfig({
         ],
         defaultStatus: 'draft',
         hideNoStatusColumn: false
+      },
+      [Categories.slug]: {
+        statuses: [
+            {value: 'planned', label: 'Planned'},
+            {value: 'active', label: 'Active'},
+            {value: 'archived', label: 'Archived'},
+        ],
+        defaultStatus: 'active',
+        hideNoStatusColumn: true,
+        cardContentComponent: CategoryCard
       }
     })
   ],

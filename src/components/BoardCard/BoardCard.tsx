@@ -1,9 +1,9 @@
 import React, { forwardRef } from 'react'
 import { CollectionConfig } from "payload/types";
 import { useConfig } from "payload/components/utilities";
-import { formatDate } from "payload/dist/admin/utilities/formatDate";
-import { Link } from 'react-router-dom';
+import { usePluginConfig } from "../WorkflowViewConfigContext/WorkflowViewConfigContext";
 import './sytles.scss';
+import BoardCardDefaultContent from "../BoardCardDefaultContent/BoardCardDefaultContent";
 
 const baseClass = 'board-card';
 
@@ -14,8 +14,9 @@ interface BoardCardProps {
 
 const BoardCard = forwardRef((props: BoardCardProps, ref: React.Ref<any>) => {
   const {collection, data, ...rest} = props
-  const {admin: {dateFormat}, routes: {admin: payloadAdmin}} = useConfig();
+  const {routes: {admin: payloadAdmin}} = useConfig();
   const {slug, admin} = collection;
+  const {cardContentComponent: CardContent = BoardCardDefaultContent} = usePluginConfig();
 
   return (
     <div
@@ -23,13 +24,7 @@ const BoardCard = forwardRef((props: BoardCardProps, ref: React.Ref<any>) => {
       ref={ ref }
       { ...rest }
     >
-      <div className={`${baseClass}__title`}>
-        <Link to={ `${ payloadAdmin }/collections/${ slug }/${ data.id }` }>
-          { admin?.useAsTitle && data[admin.useAsTitle] }
-          { !admin?.useAsTitle && data.id }
-        </Link>
-      </div>
-      <small>{ formatDate(data.createdAt, dateFormat) }</small>
+      <CardContent admin={admin} data={data} link={`${ payloadAdmin }/collections/${ slug }/${ data.id }`}/>
     </div>
   )
 })
